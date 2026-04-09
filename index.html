@@ -186,7 +186,7 @@
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">ARKMINDS AB</div>
-  <a href="#contact" class="nav-cta">Get in touch</a>
+  <a href="#contact" class="nav-cta" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'get_in_touch'})">Get in touch</a>
 </nav>
 
 <!-- HERO -->
@@ -284,11 +284,11 @@
   <div class="sec-label">Let's talk</div>
   <h2>Have a project<br/><em>in mind?</em></h2>
   <div class="contact-links">
-    <a href="mailto:kristian@arkminds.se" class="contact-link">kristian@arkminds.se</a>
+    <a href="mailto:kristian@arkminds.se" class="contact-link" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'email_address'})">kristian@arkminds.se</a>
     <div class="contact-loc">Mölndal, Gothenburg, Sweden</div>
   </div>
   <div class="contact-btns">
-    <a href="mailto:kristian@arkminds.se" class="btn-inv">Send a message</a>
+    <a href="mailto:kristian@arkminds.se" class="btn-inv" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'send_message_button'})">Send a message</a>
     <a href="https://www.linkedin.com/in/kristian-eide-9ab48792/" target="_blank" rel="noopener" class="btn-ghost">LinkedIn ↗</a>
   </div>
 </section>
