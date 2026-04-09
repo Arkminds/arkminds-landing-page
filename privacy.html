@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Privacy Policy — Arkminds AB</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KDVBWY77R0');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:    #f7f6f2;
+    --bg2:   #edeae2;
+    --ink:   #0f0f0d;
+    --ink2:  #3a3a35;
+    --muted: #8a897f;
+    --accent:#1a3a2a;
+    --rule:  #d8d5cc;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem 4rem;
+    background: rgba(247,246,242,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; text-decoration: none; }
+  .nav-cta { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; background: var(--ink); color: var(--bg); padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* PRIVACY CONTENT */
+  .privacy-content {
+    max-width: 640px; margin: 0 auto;
+    padding: 8rem 4rem 4rem;
+  }
+  .privacy-content h1 {
+    font-family: 'DM Serif Display', serif; font-weight: 400;
+    font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.5rem;
+  }
+  .privacy-updated {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: var(--muted); letter-spacing: 0.1em; margin-bottom: 3rem;
+  }
+  .privacy-content h2 {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink); margin: 2.5rem 0 0.8rem;
+  }
+  .privacy-content p, .privacy-content ul {
+    font-size: 0.92rem; color: var(--ink2); line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .privacy-content ul { padding-left: 1.5rem; }
+  .privacy-content li { margin-bottom: 0.4rem; }
+  .privacy-content a { color: var(--accent); }
+
+  .cookie-table {
+    width: 100%; border-collapse: collapse; margin: 1rem 0;
+    font-size: 0.82rem;
+  }
+  .cookie-table th, .cookie-table td {
+    text-align: left; padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .cookie-table th {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500;
+  }
+  .cookie-table td { color: var(--ink2); }
+  .cookie-table code {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    background: var(--bg2); padding: 0.1rem 0.3rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); border-top: 1px solid rgba(247,246,242,0.08);
+    padding: 1.8rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: rgba(247,246,242,0.2); letter-spacing: 0.1em; }
+  .footer-links {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; color: rgba(247,246,242,0.2);
+  }
+  .footer-link {
+    color: rgba(247,246,242,0.35); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: rgba(247,246,242,0.7); }
+  .footer-sep { margin: 0 0.4rem; color: rgba(247,246,242,0.15); }
+
+  @media(max-width:800px){
+    nav { padding: 1.2rem 1.5rem; }
+    .privacy-content { padding: 6rem 1.5rem 3rem; }
+    footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+  @media(max-width:480px){
+    .privacy-content { padding: 5.5rem 1.2rem 2.5rem; }
+    footer { padding: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">ARKMINDS AB</a>
+  <a href="index.html#contact" class="nav-cta">Get in touch</a>
+</nav>
+
+<!-- PRIVACY POLICY -->
+<section class="privacy-content">
+  <h1>Privacy Policy</h1>
+  <p class="privacy-updated">Last updated: 9 April 2026</p>
+
+  <h2>Who we are</h2>
+  <p>
+    This website is operated by <strong>Arkminds AB</strong>, a Swedish company registered in Gothenburg.
+    If you have any questions about this policy, contact us at
+    <a href="mailto:kristian@arkminds.se">kristian@arkminds.se</a>.
+  </p>
+
+  <h2>What data we collect</h2>
+  <p>
+    We use <strong>Google Analytics 4</strong> to collect anonymous usage statistics.
+    This helps us understand how visitors interact with the site. The data collected includes:
+  </p>
+  <ul>
+    <li>Pages visited and time spent on each page</li>
+    <li>Referring website or traffic source</li>
+    <li>Browser type, operating system, and screen resolution</li>
+    <li>Approximate geographic location (city-level, derived from IP address)</li>
+    <li>Whether you are a new or returning visitor</li>
+  </ul>
+  <p>
+    We do <strong>not</strong> collect your name, email address, or any other personally
+    identifiable information through analytics. All data is anonymous.
+  </p>
+
+  <h2>Cookies used</h2>
+  <p>
+    Google Analytics sets the following first-party cookies on your device,
+    <strong>only after you give consent</strong>:
+  </p>
+  <table class="cookie-table">
+    <thead>
+      <tr><th>Cookie</th><th>Purpose</th><th>Duration</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>_ga</code></td>
+        <td>Distinguishes unique visitors using a randomly generated ID</td>
+        <td>2 years</td>
+      </tr>
+      <tr>
+        <td><code>_ga_KDVBWY77R0</code></td>
+        <td>Stores session state (session count and start time)</td>
+        <td>2 years</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    We use <strong>Cookiebot</strong> as our consent management platform. Cookiebot sets a
+    cookie (<code>CookieConsent</code>) to remember your consent choice. This cookie is
+    classified as necessary and does not require consent itself.
+  </p>
+
+  <h2>Legal basis</h2>
+  <p>
+    We process analytics data based on your <strong>consent</strong> (GDPR Article 6(1)(a)).
+    Analytics cookies are only set after you actively click "Accept" on the consent banner.
+    If you decline, no tracking cookies are set and no identifying data is collected.
+  </p>
+
+  <h2>Data processor</h2>
+  <p>
+    Analytics data is processed by <strong>Google LLC</strong> (Google Analytics 4).
+    Google may transfer data to the United States under the
+    EU–U.S. Data Privacy Framework. For details, see
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>Under the GDPR, you have the right to:</p>
+  <ul>
+    <li><strong>Withdraw consent</strong> at any time by clicking "Cookie settings" in the site footer, or by clearing your browser's cookies.</li>
+    <li><strong>Access</strong> any personal data we hold about you (in practice, we hold none that is personally identifiable).</li>
+    <li><strong>Request erasure</strong> of your data.</li>
+    <li><strong>Lodge a complaint</strong> with the Swedish Authority for Privacy Protection (IMY) at <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>
+    Arkminds AB<br/>
+    Gothenburg, Sweden<br/>
+    <a href="mailto:kristian@arkminds.se">kristian@arkminds.se</a>
+  </p>
+</section>
+
+<footer>
+  <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
+  <div class="footer-links">
+    <a href="privacy.html" class="footer-link">Privacy policy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
+  </div>
+</footer>
+</body>
+</html>

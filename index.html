@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arkminds AB — Kristian Eide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-KDVBWY77R0');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -155,6 +156,18 @@
   .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
   .reveal.vis { opacity:1; transform:translateY(0); }
 
+  /* FOOTER LINKS */
+  .footer-links {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; color: rgba(247,246,242,0.2);
+  }
+  .footer-link {
+    color: rgba(247,246,242,0.35); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: rgba(247,246,242,0.7); }
+  .footer-sep { margin: 0 0.4rem; color: rgba(247,246,242,0.15); }
+
   @media(max-width:800px){
     nav { padding: 1.2rem 1.5rem; }
     #hero { min-height: auto; justify-content: flex-start; padding: 6rem 1.5rem 3rem; }
@@ -295,7 +308,11 @@
 
 <footer>
   <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
-  <div class="footer-edu">Chalmers tekniska högskola · Göteborg</div>
+  <div class="footer-links">
+    <a href="privacy.html" class="footer-link">Privacy policy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
+  </div>
 </footer>
 
 <script>
