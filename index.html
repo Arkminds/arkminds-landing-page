@@ -5,21 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Arkminds AB — Kristian Eide</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<!-- Google Consent Mode v2: deny analytics by default until user consents -->
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', {
-    'analytics_storage': 'denied',
-    'ad_storage': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
-    'wait_for_update': 500
-  });
   gtag('js', new Date());
-  gtag('config', 'G-KDVBWY77R0', { 'anonymize_ip': true });
+  gtag('config', 'G-KDVBWY77R0');
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -161,43 +156,6 @@
   .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
   .reveal.vis { opacity:1; transform:translateY(0); }
 
-  /* CONSENT BANNER */
-  #consent-banner {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    background: var(--ink); border-top: 1px solid rgba(247,246,242,0.1);
-    padding: 1.4rem 4rem;
-    animation: slideUp 0.4s ease;
-  }
-  .consent-inner {
-    max-width: 960px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-  }
-  .consent-text {
-    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
-    color: rgba(247,246,242,0.7); line-height: 1.6; flex: 1;
-  }
-  .consent-text a {
-    color: var(--bg); text-decoration: underline;
-    text-decoration-color: rgba(247,246,242,0.3);
-  }
-  .consent-text a:hover { text-decoration-color: var(--bg); }
-  .consent-actions { display: flex; gap: 0.8rem; flex-shrink: 0; }
-  .consent-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.65rem 1.4rem; cursor: pointer; border: none;
-    transition: opacity 0.2s;
-  }
-  .consent-btn:hover { opacity: 0.8; }
-  .consent-btn--accept { background: var(--bg); color: var(--ink); }
-  .consent-btn--reject {
-    background: transparent; color: rgba(247,246,242,0.5);
-    border: 1px solid rgba(247,246,242,0.15);
-  }
-  @keyframes slideUp {
-    from { transform: translateY(100%); } to { transform: translateY(0); }
-  }
-
   /* FOOTER LINKS */
   .footer-links {
     font-family: 'DM Mono', monospace; font-size: 0.65rem;
@@ -217,8 +175,6 @@
     #contact { padding: 5rem 1.5rem; }
     footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
     .stack-grid { grid-template-columns: 1fr 1fr; }
-    #consent-banner { padding: 1.2rem 1.5rem; }
-    .consent-inner { flex-direction: column; text-align: center; gap: 1rem; }
   }
 
   @media(max-width:480px){
@@ -235,9 +191,6 @@
     .stack-grid { grid-template-columns: 1fr; }
     .btn-inv, .btn-ghost { text-align: center; padding: 1rem 1.5rem; }
     footer { padding: 1.2rem; }
-    #consent-banner { padding: 1rem 1.2rem; }
-    .consent-actions { width: 100%; }
-    .consent-btn { flex: 1; }
   }
 </style>
 </head>
@@ -353,26 +306,12 @@
   </div>
 </section>
 
-<!-- CONSENT BANNER -->
-<div id="consent-banner" role="dialog" aria-label="Cookie consent" style="display:none;">
-  <div class="consent-inner">
-    <p class="consent-text">
-      This site uses cookies for anonymous analytics via Google Analytics.
-      Read the <a href="privacy.html">privacy policy</a>.
-    </p>
-    <div class="consent-actions">
-      <button id="consent-reject" class="consent-btn consent-btn--reject">Decline</button>
-      <button id="consent-accept" class="consent-btn consent-btn--accept">Accept</button>
-    </div>
-  </div>
-</div>
-
 <footer>
   <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
   <div class="footer-links">
     <a href="privacy.html" class="footer-link">Privacy policy</a>
     <span class="footer-sep">·</span>
-    <a href="#" id="consent-settings" class="footer-link">Cookie settings</a>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
   </div>
 </footer>
 
@@ -388,33 +327,6 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // --- Cookie Consent ---
-  var CONSENT_KEY = 'arkminds_consent';
-  var stored = localStorage.getItem(CONSENT_KEY);
-
-  if (stored === 'granted') {
-    gtag('consent', 'update', { 'analytics_storage': 'granted' });
-  } else if (stored !== 'denied') {
-    document.getElementById('consent-banner').style.display = '';
-  }
-
-  document.getElementById('consent-accept').addEventListener('click', function() {
-    localStorage.setItem(CONSENT_KEY, 'granted');
-    gtag('consent', 'update', { 'analytics_storage': 'granted' });
-    document.getElementById('consent-banner').style.display = 'none';
-  });
-
-  document.getElementById('consent-reject').addEventListener('click', function() {
-    localStorage.setItem(CONSENT_KEY, 'denied');
-    document.getElementById('consent-banner').style.display = 'none';
-  });
-
-  document.getElementById('consent-settings').addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem(CONSENT_KEY);
-    document.getElementById('consent-banner').style.display = '';
-  });
 </script>
 </body>
 </html>

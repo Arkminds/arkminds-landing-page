@@ -5,21 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Privacy Policy — Arkminds AB</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<!-- Google Consent Mode v2: deny analytics by default until user consents -->
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', {
-    'analytics_storage': 'denied',
-    'ad_storage': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
-    'wait_for_update': 500
-  });
   gtag('js', new Date());
-  gtag('config', 'G-KDVBWY77R0', { 'anonymize_ip': true });
+  gtag('config', 'G-KDVBWY77R0');
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -94,43 +89,6 @@
     background: var(--bg2); padding: 0.1rem 0.3rem;
   }
 
-  /* CONSENT BANNER */
-  #consent-banner {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    background: var(--ink); border-top: 1px solid rgba(247,246,242,0.1);
-    padding: 1.4rem 4rem;
-    animation: slideUp 0.4s ease;
-  }
-  .consent-inner {
-    max-width: 960px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-  }
-  .consent-text {
-    font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
-    color: rgba(247,246,242,0.7); line-height: 1.6; flex: 1;
-  }
-  .consent-text a {
-    color: var(--bg); text-decoration: underline;
-    text-decoration-color: rgba(247,246,242,0.3);
-  }
-  .consent-text a:hover { text-decoration-color: var(--bg); }
-  .consent-actions { display: flex; gap: 0.8rem; flex-shrink: 0; }
-  .consent-btn {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.65rem 1.4rem; cursor: pointer; border: none;
-    transition: opacity 0.2s;
-  }
-  .consent-btn:hover { opacity: 0.8; }
-  .consent-btn--accept { background: var(--bg); color: var(--ink); }
-  .consent-btn--reject {
-    background: transparent; color: rgba(247,246,242,0.5);
-    border: 1px solid rgba(247,246,242,0.15);
-  }
-  @keyframes slideUp {
-    from { transform: translateY(100%); } to { transform: translateY(0); }
-  }
-
   /* FOOTER */
   footer {
     background: var(--ink); border-top: 1px solid rgba(247,246,242,0.08);
@@ -152,15 +110,10 @@
     nav { padding: 1.2rem 1.5rem; }
     .privacy-content { padding: 6rem 1.5rem 3rem; }
     footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
-    #consent-banner { padding: 1.2rem 1.5rem; }
-    .consent-inner { flex-direction: column; text-align: center; gap: 1rem; }
   }
   @media(max-width:480px){
     .privacy-content { padding: 5.5rem 1.2rem 2.5rem; }
     footer { padding: 1.2rem; }
-    #consent-banner { padding: 1rem 1.2rem; }
-    .consent-actions { width: 100%; }
-    .consent-btn { flex: 1; }
   }
 </style>
 </head>
@@ -224,8 +177,9 @@
     </tbody>
   </table>
   <p>
-    We also store your consent choice in your browser's <strong>localStorage</strong>
-    (key: <code>arkminds_consent</code>). This is not a cookie and is not sent to any server.
+    We use <strong>Cookiebot</strong> as our consent management platform. Cookiebot sets a
+    cookie (<code>CookieConsent</code>) to remember your consent choice. This cookie is
+    classified as necessary and does not require consent itself.
   </p>
 
   <h2>Legal basis</h2>
@@ -246,7 +200,7 @@
   <h2>Your rights</h2>
   <p>Under the GDPR, you have the right to:</p>
   <ul>
-    <li><strong>Withdraw consent</strong> at any time by clicking "Cookie settings" in the site footer, or by clearing your browser's cookies and localStorage.</li>
+    <li><strong>Withdraw consent</strong> at any time by clicking "Cookie settings" in the site footer, or by clearing your browser's cookies.</li>
     <li><strong>Access</strong> any personal data we hold about you (in practice, we hold none that is personally identifiable).</li>
     <li><strong>Request erasure</strong> of your data.</li>
     <li><strong>Lodge a complaint</strong> with the Swedish Authority for Privacy Protection (IMY) at <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a>.</li>
@@ -260,56 +214,13 @@
   </p>
 </section>
 
-<!-- CONSENT BANNER -->
-<div id="consent-banner" role="dialog" aria-label="Cookie consent" style="display:none;">
-  <div class="consent-inner">
-    <p class="consent-text">
-      This site uses cookies for anonymous analytics via Google Analytics.
-      Read the <a href="privacy.html">privacy policy</a>.
-    </p>
-    <div class="consent-actions">
-      <button id="consent-reject" class="consent-btn consent-btn--reject">Decline</button>
-      <button id="consent-accept" class="consent-btn consent-btn--accept">Accept</button>
-    </div>
-  </div>
-</div>
-
 <footer>
   <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
   <div class="footer-links">
     <a href="privacy.html" class="footer-link">Privacy policy</a>
     <span class="footer-sep">·</span>
-    <a href="#" id="consent-settings" class="footer-link">Cookie settings</a>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
   </div>
 </footer>
-
-<script>
-  // --- Cookie Consent ---
-  var CONSENT_KEY = 'arkminds_consent';
-  var stored = localStorage.getItem(CONSENT_KEY);
-
-  if (stored === 'granted') {
-    gtag('consent', 'update', { 'analytics_storage': 'granted' });
-  } else if (stored !== 'denied') {
-    document.getElementById('consent-banner').style.display = '';
-  }
-
-  document.getElementById('consent-accept').addEventListener('click', function() {
-    localStorage.setItem(CONSENT_KEY, 'granted');
-    gtag('consent', 'update', { 'analytics_storage': 'granted' });
-    document.getElementById('consent-banner').style.display = 'none';
-  });
-
-  document.getElementById('consent-reject').addEventListener('click', function() {
-    localStorage.setItem(CONSENT_KEY, 'denied');
-    document.getElementById('consent-banner').style.display = 'none';
-  });
-
-  document.getElementById('consent-settings').addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem(CONSENT_KEY);
-    document.getElementById('consent-banner').style.display = '';
-  });
-</script>
 </body>
 </html>
