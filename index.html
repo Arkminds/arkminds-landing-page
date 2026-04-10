@@ -88,8 +88,8 @@
   }
   .hero-bio + .hero-bio { margin-top: 1.2rem; animation-delay: 0.3s; }
   /* Language switching */
-  html[lang="sv"] [lang="en"],
-  html[lang="en"] [lang="sv"] { display: none !important; }
+  html[lang="sv"] [lang="en"]:not(#CookiebotWidget):not(#CookiebotWidget *),
+  html[lang="en"] [lang="sv"]:not(#CookiebotWidget):not(#CookiebotWidget *) { display: none !important; }
 
   .nav-right { display: flex; align-items: center; gap: 1rem; }
   .lang-toggle {
