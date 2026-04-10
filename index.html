@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -87,11 +87,21 @@
     animation: fadeUp 0.7s 0.2s ease both;
   }
   .hero-bio + .hero-bio { margin-top: 1.2rem; animation-delay: 0.3s; }
-  .lang-tag {
-    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--muted); margin-right: 0.5rem;
-    border: 1px solid var(--rule); padding: 0.15rem 0.4rem; vertical-align: middle;
+  /* Language switching */
+  html[lang="sv"] [lang="en"],
+  html[lang="en"] [lang="sv"] { display: none !important; }
+
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .lang-toggle {
+    display: flex; align-items: center;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    border: 1px solid var(--rule); background: transparent; cursor: pointer; padding: 0;
   }
+  .lang-opt {
+    padding: 0.45rem 0.6rem; color: var(--muted); transition: all 0.2s;
+    line-height: 1;
+  }
+  .lang-opt.active { background: var(--ink); color: var(--bg); }
 
   /* ABOUT + STACK */
   #about {
@@ -209,20 +219,29 @@
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">ARKMINDS AB</div>
-  <a href="#contact" class="nav-cta" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'get_in_touch'})">Get in touch</a>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" aria-label="Byt språk">
+      <span class="lang-opt active" data-lang="sv">SV</span>
+      <span class="lang-opt" data-lang="en">EN</span>
+    </button>
+    <a href="#contact" class="nav-cta" lang="sv" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'get_in_touch'})">Kontakta mig</a>
+    <a href="#contact" class="nav-cta" lang="en" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'get_in_touch'})">Get in touch</a>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-wm">ARK</div>
   <div class="hero-body">
-    <p class="hero-tag">Gothenburg, Sweden · Available for consulting</p>
-    <h1>Kristian Eide —<br/><em>Freelance</em><br/>Full-Stack Engineer.</h1>
+    <p class="hero-tag" lang="sv">Göteborg, Sverige · Tillgänglig för konsultuppdrag</p>
+    <p class="hero-tag" lang="en">Gothenburg, Sweden · Available for consulting</p>
+    <h1 lang="sv">Kristian Eide —<br/><em>Frilansande</em><br/>Fullstack-utvecklare.</h1>
+    <h1 lang="en">Kristian Eide —<br/><em>Freelance</em><br/>Full-Stack Engineer.</h1>
     <p class="hero-bio" lang="sv">
-      <span class="lang-tag">sv</span>Jag brinner för att leverera resultat med kvalitet — inom mjukvaruutveckling innebär det snabbare iterationer och färre problem över tid. Just nu utforskar jag agentiska arbetsflöden som gör det möjligt för vem som helst i organisationen att bidra till mjukvaruutveckling. Mina roller är backendutvecklare (konsult) på Norion Bank och CTO på Plate Impact.
+      Jag brinner för att leverera resultat med kvalitet — inom mjukvaruutveckling innebär det snabbare iterationer och färre problem över tid. Just nu utforskar jag agentiska arbetsflöden som gör det möjligt för vem som helst i organisationen att bidra till mjukvaruutveckling. Mina roller är backendutvecklare (konsult) på Norion Bank och CTO på Plate Impact.
     </p>
     <p class="hero-bio" lang="en">
-      <span class="lang-tag">en</span>I love to deliver results with quality, in software engineering that means faster
+      I love to deliver results with quality, in software engineering that means faster
       iterations and fewer issues over time. Currently exploring agentic workflows that
       let anyone in an organisation contribute to software development. My roles are
       backend developer consultant at Norion Bank and CTO at Plate Impact.
@@ -234,53 +253,72 @@
 <section id="about">
   <!-- Left: background & projects -->
   <div class="about-col reveal">
-    <div class="sec-label">Background</div>
-    <p>
-      I studied at <strong>Chalmers tekniska högskola</strong> in Gothenburg, earning
-      degrees in both Automation &amp; Mechatronics and Entrepreneurship &amp; Business Design.
-    </p>
-    <p>
-      At <strong>Norion Bank</strong> (current engagement) I've been part of a green-field
-      project in the fintech space — where quality, security and compliance set a high bar.
-      My main focus today is agentic workflows that empower anyone in an organisation to
-      contribute to software development.
-    </p>
-    <p>
-      I'm also CTO at <strong>Plate Impact</strong>, a tech and sustainability startup,
-      where I lead full-stack development across .NET, Angular and Azure.
-    </p>
+    <div class="sec-label" lang="sv">Bakgrund</div>
+    <div class="sec-label" lang="en">Background</div>
+    <div lang="sv">
+      <p>
+        Jag studerade vid <strong>Chalmers tekniska högskola</strong> i Göteborg och tog examen inom
+        både Automation &amp; Mekatronik samt Entreprenörskap &amp; Affärsdesign.
+      </p>
+      <p>
+        På <strong>Norion Bank</strong> (nuvarande uppdrag) har jag varit del av ett nystartat projekt
+        inom fintech — där kvalitet, säkerhet och regelefterlevnad sätter ribban högt.
+        Mitt huvudfokus idag är agentiska arbetsflöden som gör det möjligt för vem som helst
+        i en organisation att bidra till mjukvaruutveckling.
+      </p>
+      <p>
+        Jag är även CTO på <strong>Plate Impact</strong>, en tech- och hållbarhetsstartup,
+        där jag leder fullstackutveckling med .NET, Angular och Azure.
+      </p>
+    </div>
+    <div lang="en">
+      <p>
+        I studied at <strong>Chalmers tekniska högskola</strong> in Gothenburg, earning
+        degrees in both Automation &amp; Mechatronics and Entrepreneurship &amp; Business Design.
+      </p>
+      <p>
+        At <strong>Norion Bank</strong> (current engagement) I've been part of a green-field
+        project in the fintech space — where quality, security and compliance set a high bar.
+        My main focus today is agentic workflows that empower anyone in an organisation to
+        contribute to software development.
+      </p>
+      <p>
+        I'm also CTO at <strong>Plate Impact</strong>, a tech and sustainability startup,
+        where I lead full-stack development across .NET, Angular and Azure.
+      </p>
+    </div>
 
     <ul class="project-list">
       <li>
         <span class="project-num">01</span>
         <div>
           <div class="project-name">Plate Impact</div>
-          <div class="project-role">CTO &amp; Co-Founder · SaaS · Sustainability tech</div>
-          <div class="project-date">Sep 2022 – present</div>
+          <div class="project-role"><span lang="sv">CTO &amp; medgrundare · SaaS · Hållbarhetsteknik</span><span lang="en">CTO &amp; Co-Founder · SaaS · Sustainability tech</span></div>
+          <div class="project-date"><span lang="sv">Sep 2022 – pågående</span><span lang="en">Sep 2022 – present</span></div>
         </div>
       </li>
       <li>
         <span class="project-num">02</span>
         <div>
           <div class="project-name">Norion Bank</div>
-          <div class="project-role">Back-End Consultant · Fintech</div>
-          <div class="project-date">Oct 2023 – present</div>
+          <div class="project-role"><span lang="sv">Back-end-konsult · Fintech</span><span lang="en">Back-End Consultant · Fintech</span></div>
+          <div class="project-date"><span lang="sv">Okt 2023 – pågående</span><span lang="en">Oct 2023 – present</span></div>
         </div>
       </li>
       <li>
         <span class="project-num">03</span>
         <div>
           <div class="project-name">TMC</div>
-          <div class="project-role">Software Engineer &amp; Employeneur</div>
-          <div class="project-date">Aug 2021 – Sep 2022</div>
+          <div class="project-role"><span lang="sv">Mjukvaruingenjör &amp; Employeneur</span><span lang="en">Software Engineer &amp; Employeneur</span></div>
+          <div class="project-date"><span lang="sv">Aug 2021 – sep 2022</span><span lang="en">Aug 2021 – Sep 2022</span></div>
         </div>
       </li>
       <li>
         <span class="project-num">04</span>
         <div>
           <div class="project-name">Capgemini</div>
-          <div class="project-role">Software Engineer · Ignite Graduate Program</div>
-          <div class="project-date">Sep 2019 – Sep 2021</div>
+          <div class="project-role"><span lang="sv">Mjukvaruingenjör · Ignite Graduate Program</span><span lang="en">Software Engineer · Ignite Graduate Program</span></div>
+          <div class="project-date">Sep 2019 – sep 2021</div>
         </div>
       </li>
     </ul>
@@ -288,7 +326,8 @@
 
   <!-- Right: tech stack -->
   <div class="stack-col reveal">
-    <div class="sec-label">Tech stack</div>
+    <div class="sec-label" lang="sv">Teknikstack</div>
+    <div class="sec-label" lang="en">Tech stack</div>
     <div class="stack-grid">
       <span class="stack-tag">C#</span>
       <span class="stack-tag">.NET</span>
@@ -308,24 +347,33 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="sec-label">Let's talk</div>
-  <h2>Have a project<br/><em>in mind?</em></h2>
+  <div class="sec-label" lang="sv">Hör av dig</div>
+  <div class="sec-label" lang="en">Let's talk</div>
+  <h2 lang="sv">Har du ett projekt<br/><em>i tankarna?</em></h2>
+  <h2 lang="en">Have a project<br/><em>in mind?</em></h2>
   <div class="contact-links">
     <a href="mailto:kristian@arkminds.se" class="contact-link" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'email_address'})">kristian@arkminds.se</a>
-    <div class="contact-loc">Mölndal, Gothenburg, Sweden</div>
+    <div class="contact-loc" lang="sv">Mölndal, Göteborg, Sverige</div>
+    <div class="contact-loc" lang="en">Mölndal, Gothenburg, Sweden</div>
   </div>
   <div class="contact-btns">
-    <a href="mailto:kristian@arkminds.se" class="btn-inv" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'send_message_button'})">Send a message</a>
+    <a href="mailto:kristian@arkminds.se" class="btn-inv" lang="sv" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'send_message_button'})">Skicka meddelande</a>
+    <a href="mailto:kristian@arkminds.se" class="btn-inv" lang="en" onclick="gtag('event', 'click', {event_category: 'contact', event_label: 'send_message_button'})">Send a message</a>
     <a href="https://www.linkedin.com/in/kristian-eide-9ab48792/" target="_blank" rel="noopener" class="btn-ghost">LinkedIn ↗</a>
   </div>
 </section>
 
 <footer>
   <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
-  <div class="footer-links">
+  <div class="footer-links" lang="sv">
     <a href="privacy.html" class="footer-link">Cookiepolicy</a>
     <span class="footer-sep">·</span>
     <a href="javascript:Cookiebot.renew()" class="footer-link">Cookieinställningar</a>
+  </div>
+  <div class="footer-links" lang="en">
+    <a href="privacy.html" class="footer-link">Cookie policy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
   </div>
 </footer>
 
@@ -341,6 +389,28 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Language toggle
+  (function() {
+    const saved = localStorage.getItem('lang');
+    if (saved && (saved === 'sv' || saved === 'en')) {
+      document.documentElement.lang = saved;
+    }
+    function updateToggle() {
+      const current = document.documentElement.lang;
+      document.querySelectorAll('.lang-opt').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === current);
+      });
+    }
+    updateToggle();
+    document.getElementById('langToggle').addEventListener('click', function() {
+      var current = document.documentElement.lang;
+      var next = current === 'sv' ? 'en' : 'sv';
+      document.documentElement.lang = next;
+      localStorage.setItem('lang', next);
+      updateToggle();
+    });
+  })();
 </script>
 </body>
 </html>
