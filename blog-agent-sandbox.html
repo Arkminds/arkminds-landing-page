@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>En sandlåda för AI-agenter — Arkminds AB</title>
-<meta name="description" content="Ge agenten en egen dator: en Docker-sandlåda med isolering, deny-all-nätverk och en auth-proxy som håller i nycklarna — och vad det möjliggör. Av Kristian Eide, Arkminds AB."/>
+<meta name="description" content="Ge agenten en egen dator: en Docker-sandlåda med isolering, stängt nätverk och en proxy som sköter nycklarna — och vad det gör möjligt. Av Kristian Eide, Arkminds AB."/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Google Consent Mode v2: deny by default, Cookiebot updates on user consent -->
 <script>
@@ -152,7 +152,7 @@
   <a href="blog.html" class="article-back" lang="sv">← Tillbaka till bloggen</a>
   <a href="blog.html" class="article-back" lang="en">← Back to the blog</a>
 
-  <div class="article-cat" lang="sv">Agentiska AI</div>
+  <div class="article-cat" lang="sv">Agentisk AI</div>
   <div class="article-cat" lang="en">Agentic AI</div>
   <h1 lang="sv">En sandlåda för AI-agenter</h1>
   <h1 lang="en">A sandbox for AI agents</h1>
@@ -160,10 +160,10 @@
   <div class="article-meta" lang="en">Kristian Eide · July 11, 2026 · 3 min read</div>
 
   <p class="article-lead" lang="sv">
-    Det snabbaste sättet att göra en kodagent användbar är att ge den självständighet:
-    låta den köra kommandon, installera paket, köra tester och iterera. Det snabbaste
-    sättet att ångra sig är att ge den självständigheten på din egen dator. Så: ge
-    agenten en egen dator.
+    En kodagent gör som mest nytta när den får jobba självständigt: köra kommandon,
+    installera paket, köra tester och pröva sig fram på egen hand. Men att släppa den
+    lös på sin egen dator är ett snabbt sätt att ångra sig. Lösningen: ge agenten en
+    egen dator.
   </p>
   <p class="article-lead" lang="en">
     The fastest way to make a coding agent useful is to give it autonomy: let it run
@@ -172,10 +172,10 @@
   </p>
 
   <p lang="sv">
-    Jag har byggt en liten proof of concept som gör precis det — en Docker-sandlåda som
-    kör en kodagent (GitHub Copilot CLI i det här fallet) i en isolerad Linux-microVM,
-    med verktygen den behöver förinstallerade: .NET, Azure CLI, Playwright, Node, Python,
-    Go. Tre idéer bär hela upplägget.
+    Jag har byggt ett litet proof of concept som gör precis det — en Docker-sandlåda
+    där en kodagent (GitHub Copilot CLI i det här fallet) kör i en isolerad
+    Linux-microVM med alla verktyg den behöver på plats: .NET, Azure CLI, Playwright,
+    Node, Python, Go. Upplägget vilar på tre idéer.
   </p>
   <p lang="en">
     I've built a small proof of concept that does exactly that — a Docker sandbox that
@@ -187,9 +187,10 @@
   <h2 lang="sv">Isolering som standard</h2>
   <h2 lang="en">Isolation by default</h2>
   <p lang="sv">
-    Agenten jobbar inte på min dator; den jobbar i en virtuell engångsmaskin som råkar
-    ha mitt projekt monterat. Allt den gör stannar i lådan. När uppgiften är klar raderar
-    ett kommando hela maskinen — och eventuell röra försvinner med den.
+    Agenten jobbar inte på min dator, utan i en tillfällig virtuell maskin med mitt
+    projekt monterat. Allt den gör stannar i lådan. När uppgiften är klar raderas hela
+    maskinen med ett kommando — och har den ställt till något på vägen försvinner det
+    med den.
   </p>
   <p lang="en">
     The agent doesn't work on my computer; it works in a disposable virtual machine that
@@ -201,13 +202,13 @@
   <h2 lang="sv">Nätverket är deny-all</h2>
   <h2 lang="en">The network is deny-all</h2>
   <p lang="sv">
-    Inifrån sandlådan existerar internet i princip inte. Utgående trafik går genom en
-    proxy med deny-all som grundregel och en kort tillåtelselista: GitHub, paketflödena
-    vi använder, Azure DevOps. Allt annat blockeras. Till och med npm-registret är
-    avstängt i körläge — paketen agenten behöver bakas in i imagen när den byggs, så den
-    kan inte luras att hämta hem och köra godtycklig kod. Och om en prompt-injektion
-    någon gång övertalar agenten att läcka något, finns det väldigt få ställen kvar att
-    skicka det till.
+    Inifrån sandlådan finns nästan inget internet. All utgående trafik går genom en
+    proxy där grundregeln är att blockera allt — bara en kort lista med undantag släpps
+    igenom: GitHub, paketkällorna vi använder, Azure DevOps. Till och med npm-registret
+    är stängt under körning; paketen agenten behöver bakas in i imagen redan när den
+    byggs, så agenten kan inte luras att hämta hem och köra godtycklig kod. Och skulle
+    en promptinjektion någon gång få agenten att försöka läcka något, finns det väldigt
+    få ställen att skicka det till.
   </p>
   <p lang="en">
     From inside the sandbox, the internet mostly doesn't exist. Outbound traffic passes
@@ -219,14 +220,15 @@
     places left to send it.
   </p>
 
-  <h2 lang="sv">Nycklarna bor i proxyn</h2>
+  <h2 lang="sv">Nycklarna sitter i proxyn</h2>
   <h2 lang="en">The keys live in the proxy</h2>
   <p lang="sv">
-    Agenten konfigureras aldrig med inloggningsuppgifter. En liten reverse proxy inne i
-    sandlådan injicerar rätt Authorization-header för rätt värd — en GitHub-token för
-    GitHubs API, en Azure DevOps-PAT för Azure DevOps. Reglerna är ren JSON, så att lägga
-    till en tjänst är konfiguration snarare än kod, och kortlivade SSO-tokens fungerar
-    lika bra som långlivade personliga access-tokens.
+    Agenten får aldrig några inloggningsuppgifter. I stället injicerar en liten reverse
+    proxy i sandlådan rätt Authorization-header mot rätt tjänst — en GitHub-token mot
+    GitHubs API, en Azure DevOps-PAT mot Azure DevOps. Reglerna ligger i en vanlig
+    JSON-fil, så en ny tjänst är en konfigurationsändring snarare än ny kod. Och
+    eftersom proxyn sköter autentiseringen fungerar kortlivade SSO-tokens precis lika
+    bra som långlivade personliga access tokens.
   </p>
   <p lang="en">
     The agent is never configured with credentials. A small reverse proxy inside the
@@ -236,15 +238,15 @@
     work just as well as long-lived personal access tokens.
   </p>
 
-  <blockquote lang="sv">Sätt skyddsräckena i miljön, inte i användarens vaksamhet.</blockquote>
+  <blockquote lang="sv">Skyddsräckena hör hemma i miljön — inte i användarens vaksamhet.</blockquote>
   <blockquote lang="en">Put the guardrails in the environment, not in the operator's vigilance.</blockquote>
 
-  <h2 lang="sv">Vad det möjliggör</h2>
+  <h2 lang="sv">Vad det här gör möjligt</h2>
   <h2 lang="en">What it allows</h2>
   <p lang="sv">
-    <strong>Full självständighet utan fullt förtroende.</strong> Agenten kan köras i det
-    läge där den faktiskt är produktiv — ingen bekräftelsefråga före varje kommando —
-    eftersom sprängradien är en engångs-VM med stängt nätverk, inte din laptop.
+    <strong>Fria tyglar utan blind tillit.</strong> Agenten kan köras i det läge där den
+    faktiskt är produktiv — utan bekräftelsefråga före varje kommando — eftersom det
+    värsta som kan hända drabbar en virtuell maskin som ändå ska slängas, inte din dator.
   </p>
   <p lang="en">
     <strong>Full autonomy without full trust.</strong> The agent can run in the mode
@@ -252,9 +254,9 @@
     because the blast radius is a disposable VM with a closed network, not your laptop.
   </p>
   <p lang="sv">
-    <strong>Arbete mot privat kod och interna system.</strong> Proxymönstret låter
-    agenten prata med privata repon och Azure DevOps utan att någon klistrar in tokens i
-    dess konfiguration.
+    <strong>Arbete mot privat kod och interna system.</strong> Proxyupplägget gör att
+    agenten kan jobba mot privata repon och Azure DevOps utan att någon behöver klistra
+    in tokens i agentens konfiguration.
   </p>
   <p lang="en">
     <strong>Work against private code and internal systems.</strong> The proxy pattern
@@ -262,10 +264,10 @@
     tokens into its configuration.
   </p>
   <p lang="sv">
-    <strong>Miljöer som vem som helst kan starta.</strong> Ett skript bygger imagen,
-    startar sandlådan, applicerar nätverkspolicyn och drar igång proxyn. Det är den delen
-    jag bryr mig mest om: när skyddsräckena bor i miljön i stället för i användarens
-    vaksamhet, slutar det vara vårdslöst att låta fler i en organisation köra agenter.
+    <strong>Miljöer som vem som helst kan starta.</strong> Ett enda skript bygger imagen,
+    startar sandlådan, slår på nätverksreglerna och drar igång proxyn. Det är den delen
+    jag bryr mig mest om: när skyddsräckena sitter i miljön i stället för hos användaren
+    blir det plötsligt rimligt att låta fler i en organisation köra agenter.
   </p>
   <p lang="en">
     <strong>Environments anyone can start.</strong> One script builds the image, starts
@@ -278,11 +280,11 @@
   <h2 lang="sv">Vart det här är på väg</h2>
   <h2 lang="en">Where this is heading</h2>
   <p lang="sv">
-    Det här är en proof of concept, byggd runt Copilot CLI — men inget i mönstret är
-    specifikt för just den agenten. Samma recept fungerar för vilken agent som helst som
-    går att köra i en terminal: isolera, tillåtelselista, injicera. Koden finns
+    Det här är ett proof of concept byggt kring Copilot CLI — men inget i mönstret är
+    knutet till just den agenten. Samma recept fungerar för vilken agent som helst som
+    går att köra i en terminal: isolera, filtrera, injicera. Koden finns
     <a href="https://github.com/Arkminds/dcoker-sandbox-poc" target="_blank" rel="noopener">på GitHub</a>,
-    och i kommande inlägg tänker jag gräva i de enskilda delarna.
+    och i kommande inlägg tänker jag gräva djupare i de enskilda delarna.
   </p>
   <p lang="en">
     This is a proof of concept, built around Copilot CLI — but nothing in the pattern is
