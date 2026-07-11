@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Anteckningar om agentiska arbetsflöden — Arkminds AB</title>
-<meta name="description" content="En första skiss över agentiska arbetsflöden — hur vem som helst i en organisation kan bidra till mjukvaruutveckling. Av Kristian Eide, Arkminds AB."/>
+<title>En sandlåda för AI-agenter — Arkminds AB</title>
+<meta name="description" content="Ge agenten en egen dator: en Docker-sandlåda med isolering, deny-all-nätverk och en auth-proxy som håller i nycklarna — och vad det möjliggör. Av Kristian Eide, Arkminds AB."/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Google Consent Mode v2: deny by default, Cookiebot updates on user consent -->
 <script>
@@ -91,6 +91,7 @@
   }
   .article-lead { font-size: 1.12rem; color: var(--ink); line-height: 1.75; margin-bottom: 1.6rem; font-weight: 400; }
   .article p { font-size: 0.98rem; color: var(--ink2); line-height: 1.85; margin-bottom: 1.3rem; }
+  .article p strong { color: var(--ink); font-weight: 500; }
   .article h2 {
     font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em;
     text-transform: uppercase; color: var(--ink); margin: 2.8rem 0 1rem;
@@ -101,11 +102,6 @@
     border-left: 2px solid var(--accent); padding-left: 1.6rem; margin: 2.4rem 0;
   }
   .article a { color: var(--accent); }
-  .placeholder-note {
-    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em;
-    color: var(--muted); background: var(--bg2); border: 1px solid var(--rule);
-    padding: 0.9rem 1.1rem; margin-bottom: 2.6rem; line-height: 1.7;
-  }
   .article-end {
     margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--rule);
     display: flex; align-items: center; gap: 1rem;
@@ -158,70 +154,142 @@
 
   <div class="article-cat" lang="sv">Agentiska AI</div>
   <div class="article-cat" lang="en">Agentic AI</div>
-  <h1 lang="sv">Anteckningar om agentiska arbetsflöden</h1>
-  <h1 lang="en">Notes on agentic workflows</h1>
-  <div class="article-meta" lang="sv">Kristian Eide · 10 juli 2026 · 4 min läsning</div>
-  <div class="article-meta" lang="en">Kristian Eide · July 10, 2026 · 4 min read</div>
-
-  <p class="placeholder-note" lang="sv">
-    Platshållartext — detta är det första inlägget i en ny blogg. Innehållet nedan
-    är en skiss och kommer att skrivas om.
-  </p>
-  <p class="placeholder-note" lang="en">
-    Placeholder — this is the first post in a new blog. The content below is a draft
-    sketch and will be rewritten.
-  </p>
+  <h1 lang="sv">En sandlåda för AI-agenter</h1>
+  <h1 lang="en">A sandbox for AI agents</h1>
+  <div class="article-meta" lang="sv">Kristian Eide · 11 juli 2026 · 3 min läsning</div>
+  <div class="article-meta" lang="en">Kristian Eide · July 11, 2026 · 3 min read</div>
 
   <p class="article-lead" lang="sv">
-    Den mest intressanta frågan i mjukvaruutveckling just nu är inte "hur snabbt kan
-    en utvecklare gå?" utan "hur många fler kan bidra?" Agentiska arbetsflöden gör att
-    fler röster i en organisation kan omsätta idéer till fungerande mjukvara.
+    Det snabbaste sättet att göra en kodagent användbar är att ge den självständighet:
+    låta den köra kommandon, installera paket, köra tester och iterera. Det snabbaste
+    sättet att ångra sig är att ge den självständigheten på din egen dator. Så: ge
+    agenten en egen dator.
   </p>
   <p class="article-lead" lang="en">
-    The most interesting question in software right now isn't "how fast can one engineer
-    go?" but "how many more people can contribute?" Agentic workflows let more voices in
-    an organisation turn ideas into working software.
+    The fastest way to make a coding agent useful is to give it autonomy: let it run
+    commands, install packages, execute tests, iterate. The fastest way to regret it is
+    to give it that autonomy on your own machine. So: give the agent a machine of its own.
   </p>
 
   <p lang="sv">
-    Under det senaste året har jag ägnat mycket tid åt att bygga arbetsflöden där en
-    agent tar hand om de mekaniska delarna — läsa kod, skriva tester, förbereda ändringar
-    — så att en människa kan fokusera på riktningen och besluten. Det förändrar vem som
-    kan delta.
+    Jag har byggt en liten proof of concept som gör precis det — en Docker-sandlåda som
+    kör en kodagent (GitHub Copilot CLI i det här fallet) i en isolerad Linux-microVM,
+    med verktygen den behöver förinstallerade: .NET, Azure CLI, Playwright, Node, Python,
+    Go. Tre idéer bär hela upplägget.
   </p>
   <p lang="en">
-    Over the past year I've spent a lot of time building workflows where an agent handles
-    the mechanical parts — reading code, writing tests, preparing changes — so a human can
-    focus on direction and decisions. That shifts who gets to take part.
+    I've built a small proof of concept that does exactly that — a Docker sandbox that
+    runs a coding agent (GitHub Copilot CLI, in this case) inside an isolated Linux
+    microVM, with the tools it needs pre-installed: .NET, Azure CLI, Playwright, Node,
+    Python, Go. Three ideas carry the whole thing.
   </p>
 
-  <blockquote lang="sv">Kvalitet är inte motsatsen till hastighet. Över tid är det källan till den.</blockquote>
-  <blockquote lang="en">Quality isn't the opposite of speed. Over time, it's the source of it.</blockquote>
-
-  <h2 lang="sv">Var jag börjar</h2>
-  <h2 lang="en">Where I start</h2>
+  <h2 lang="sv">Isolering som standard</h2>
+  <h2 lang="en">Isolation by default</h2>
   <p lang="sv">
-    Jag börjar alltid med tydliga gränser: vad agenten får röra, hur ändringar granskas
-    och hur vi vet att något faktiskt fungerar. Utan de gränserna blir det snabbt rörigt.
-    Med dem blir det förvånansvärt lugnt.
+    Agenten jobbar inte på min dator; den jobbar i en virtuell engångsmaskin som råkar
+    ha mitt projekt monterat. Allt den gör stannar i lådan. När uppgiften är klar raderar
+    ett kommando hela maskinen — och eventuell röra försvinner med den.
   </p>
   <p lang="en">
-    I always start with clear boundaries: what the agent may touch, how changes get
-    reviewed, and how we know something actually works. Without those boundaries it gets
-    messy fast. With them, it becomes surprisingly calm.
+    The agent doesn't work on my computer; it works in a disposable virtual machine that
+    happens to have my project mounted into it. Everything it does stays inside the box.
+    When the task is done, one command deletes the whole machine — and whatever mess was
+    made goes with it.
   </p>
 
-  <h2 lang="sv">Vad som kommer härnäst</h2>
-  <h2 lang="en">What's next</h2>
+  <h2 lang="sv">Nätverket är deny-all</h2>
+  <h2 lang="en">The network is deny-all</h2>
   <p lang="sv">
-    I kommande inlägg tänker jag skriva mer konkret om verktygen, misstagen och de
-    mönster som visat sig hålla. Hör gärna av dig om det är något särskilt du vill att
-    jag gräver i.
+    Inifrån sandlådan existerar internet i princip inte. Utgående trafik går genom en
+    proxy med deny-all som grundregel och en kort tillåtelselista: GitHub, paketflödena
+    vi använder, Azure DevOps. Allt annat blockeras. Till och med npm-registret är
+    avstängt i körläge — paketen agenten behöver bakas in i imagen när den byggs, så den
+    kan inte luras att hämta hem och köra godtycklig kod. Och om en prompt-injektion
+    någon gång övertalar agenten att läcka något, finns det väldigt få ställen kvar att
+    skicka det till.
   </p>
   <p lang="en">
-    In upcoming posts I'll get more concrete about the tools, the mistakes, and the
-    patterns that have held up. Reach out if there's something specific you'd like me to
-    dig into.
+    From inside the sandbox, the internet mostly doesn't exist. Outbound traffic passes
+    through a proxy with a deny-all policy and a short allowlist: GitHub, the package
+    feeds we rely on, Azure DevOps. Everything else is blocked. Even the npm registry is
+    shut off at runtime — the packages the agent needs are baked into the image when it's
+    built, so it can't be tricked into pulling down and running arbitrary code. And if a
+    prompt injection ever talks the agent into leaking something, there are very few
+    places left to send it.
+  </p>
+
+  <h2 lang="sv">Nycklarna bor i proxyn</h2>
+  <h2 lang="en">The keys live in the proxy</h2>
+  <p lang="sv">
+    Agenten konfigureras aldrig med inloggningsuppgifter. En liten reverse proxy inne i
+    sandlådan injicerar rätt Authorization-header för rätt värd — en GitHub-token för
+    GitHubs API, en Azure DevOps-PAT för Azure DevOps. Reglerna är ren JSON, så att lägga
+    till en tjänst är konfiguration snarare än kod, och kortlivade SSO-tokens fungerar
+    lika bra som långlivade personliga access-tokens.
+  </p>
+  <p lang="en">
+    The agent is never configured with credentials. A small reverse proxy inside the
+    sandbox injects the right Authorization header for the right host — a GitHub token
+    for the GitHub API, an Azure DevOps PAT for Azure DevOps. The rules are plain JSON,
+    so adding a service is configuration rather than code, and short-lived SSO tokens
+    work just as well as long-lived personal access tokens.
+  </p>
+
+  <blockquote lang="sv">Sätt skyddsräckena i miljön, inte i användarens vaksamhet.</blockquote>
+  <blockquote lang="en">Put the guardrails in the environment, not in the operator's vigilance.</blockquote>
+
+  <h2 lang="sv">Vad det möjliggör</h2>
+  <h2 lang="en">What it allows</h2>
+  <p lang="sv">
+    <strong>Full självständighet utan fullt förtroende.</strong> Agenten kan köras i det
+    läge där den faktiskt är produktiv — ingen bekräftelsefråga före varje kommando —
+    eftersom sprängradien är en engångs-VM med stängt nätverk, inte din laptop.
+  </p>
+  <p lang="en">
+    <strong>Full autonomy without full trust.</strong> The agent can run in the mode
+    where it's actually productive — no confirmation prompt before every command —
+    because the blast radius is a disposable VM with a closed network, not your laptop.
+  </p>
+  <p lang="sv">
+    <strong>Arbete mot privat kod och interna system.</strong> Proxymönstret låter
+    agenten prata med privata repon och Azure DevOps utan att någon klistrar in tokens i
+    dess konfiguration.
+  </p>
+  <p lang="en">
+    <strong>Work against private code and internal systems.</strong> The proxy pattern
+    lets the agent talk to private repositories and Azure DevOps without anyone pasting
+    tokens into its configuration.
+  </p>
+  <p lang="sv">
+    <strong>Miljöer som vem som helst kan starta.</strong> Ett skript bygger imagen,
+    startar sandlådan, applicerar nätverkspolicyn och drar igång proxyn. Det är den delen
+    jag bryr mig mest om: när skyddsräckena bor i miljön i stället för i användarens
+    vaksamhet, slutar det vara vårdslöst att låta fler i en organisation köra agenter.
+  </p>
+  <p lang="en">
+    <strong>Environments anyone can start.</strong> One script builds the image, starts
+    the sandbox, applies the network policy and launches the proxy. That's the part I
+    care most about: when the guardrails live in the environment instead of in the
+    operator's vigilance, letting more people in an organisation run agents stops being
+    reckless.
+  </p>
+
+  <h2 lang="sv">Vart det här är på väg</h2>
+  <h2 lang="en">Where this is heading</h2>
+  <p lang="sv">
+    Det här är en proof of concept, byggd runt Copilot CLI — men inget i mönstret är
+    specifikt för just den agenten. Samma recept fungerar för vilken agent som helst som
+    går att köra i en terminal: isolera, tillåtelselista, injicera. Koden finns
+    <a href="https://github.com/Arkminds/dcoker-sandbox-poc" target="_blank" rel="noopener">på GitHub</a>,
+    och i kommande inlägg tänker jag gräva i de enskilda delarna.
+  </p>
+  <p lang="en">
+    This is a proof of concept, built around Copilot CLI — but nothing in the pattern is
+    specific to that agent. The same recipe works for any agent you can run in a
+    terminal: isolate, allowlist, inject. The code is
+    <a href="https://github.com/Arkminds/dcoker-sandbox-poc" target="_blank" rel="noopener">on GitHub</a>,
+    and in future posts I'll dig into the individual pieces.
   </p>
 
   <div class="article-end">
