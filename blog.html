@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blogg — Arkminds AB</title>
+<meta name="description" content="Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet — av Kristian Eide, Arkminds AB."/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Google Consent Mode v2: deny by default, Cookiebot updates on user consent -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+</script>
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-KDVBWY77R0');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:    #f7f6f2;
+    --bg2:   #edeae2;
+    --ink:   #0f0f0d;
+    --ink2:  #3a3a35;
+    --muted: #8a897f;
+    --accent:#1a3a2a;
+    --rule:  #d8d5cc;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem 4rem;
+    background: rgba(247,246,242,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid transparent; transition: border-color 0.4s;
+  }
+  nav.scrolled { border-color: var(--rule); }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; text-decoration: none; }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-cta { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; background: var(--ink); color: var(--bg); padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent); }
+  .lang-toggle {
+    display: flex; align-items: center;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    border: 1px solid var(--rule); background: transparent; cursor: pointer; padding: 0;
+  }
+  .lang-opt { padding: 0.45rem 0.6rem; color: var(--muted); transition: all 0.2s; line-height: 1; }
+  .lang-opt.active { background: var(--ink); color: var(--bg); }
+
+  /* Language switching – scoped to #site-content so third-party injections (Cookiebot, etc.) are never hidden */
+  html[lang="sv"] #site-content [lang="en"],
+  html[lang="en"] #site-content [lang="sv"] { display: none !important; }
+
+  .sec-label {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .sec-label::before { content: ''; width: 20px; height: 1px; background: var(--muted); }
+
+  /* BLOG HEADER */
+  #blog-head {
+    padding: 9rem 4rem 3rem; border-bottom: 1px solid var(--rule);
+  }
+  #blog-head h1 {
+    font-family: 'DM Serif Display', serif; font-weight: 400;
+    font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.0; letter-spacing: -0.025em;
+    color: var(--ink); margin-bottom: 1.6rem;
+  }
+  #blog-head h1 em { font-style: italic; color: var(--accent); }
+  .blog-intro { max-width: 540px; font-size: 1rem; color: var(--ink2); line-height: 1.8; }
+
+  /* POST LIST */
+  #posts { padding: 1rem 4rem 6rem; background: var(--white); border-bottom: 1px solid var(--rule); }
+  .post {
+    display: grid; grid-template-columns: 180px 1fr auto; gap: 2.5rem; align-items: baseline;
+    padding: 2.6rem 0; border-bottom: 1px solid var(--rule);
+    text-decoration: none; color: inherit; transition: opacity 0.2s;
+  }
+  .post:hover { opacity: 0.72; }
+  .post-meta { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--muted); line-height: 1.9; }
+  .post-cat { display: inline-block; border: 1px solid var(--rule); padding: 0.15rem 0.5rem; color: var(--ink2); margin-bottom: 0.6rem; }
+  .post-title { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.12; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 0.7rem; }
+  .post-excerpt { font-size: 0.92rem; color: var(--ink2); line-height: 1.75; max-width: 52ch; }
+  .post-arrow { font-family: 'DM Mono', monospace; font-size: 1.1rem; color: var(--ink); align-self: center; }
+  .post.upcoming { pointer-events: none; }
+  .post.upcoming .post-title, .post.upcoming .post-excerpt { color: var(--muted); }
+  .post.upcoming .post-arrow { color: var(--rule); }
+
+  /* CTA STRIP */
+  #blog-cta { background: var(--ink); padding: 5rem 4rem; text-align: center; }
+  #blog-cta p { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.6rem); color: var(--bg); line-height: 1.2; margin-bottom: 2rem; }
+  #blog-cta p em { font-style: italic; color: rgba(247,246,242,0.4); }
+  .btn-inv { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; background: var(--bg); color: var(--ink); text-decoration: none; padding: 0.9rem 2.2rem; transition: opacity 0.2s; }
+  .btn-inv:hover { opacity: 0.8; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); border-top: 1px solid rgba(247,246,242,0.08);
+    padding: 1.8rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: rgba(247,246,242,0.2); letter-spacing: 0.1em; }
+  .footer-links { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(247,246,242,0.2); }
+  .footer-link { color: rgba(247,246,242,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: rgba(247,246,242,0.7); }
+  .footer-sep { margin: 0 0.4rem; color: rgba(247,246,242,0.15); }
+
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.vis { opacity:1; transform:translateY(0); }
+
+  @media(max-width:800px){
+    nav { padding: 1.2rem 1.5rem; }
+    #blog-head { padding: 7rem 1.5rem 2.5rem; }
+    #posts { padding: 0.5rem 1.5rem 4rem; }
+    .post { grid-template-columns: 1fr; gap: 0.8rem; padding: 2rem 0; }
+    .post-arrow { display: none; }
+    #blog-cta { padding: 4rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+  @media(max-width:480px){
+    #blog-head { padding: 6rem 1.2rem 2rem; }
+    #posts { padding: 0.5rem 1.2rem 3rem; }
+    #blog-cta { padding: 3rem 1.2rem; }
+    footer { padding: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="site-content">
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">ARKMINDS AB</a>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" aria-label="Byt språk">
+      <span class="lang-opt active" data-lang="sv">SV</span>
+      <span class="lang-opt" data-lang="en">EN</span>
+    </button>
+    <a href="index.html#contact" class="nav-cta" lang="sv">Kontakta mig</a>
+    <a href="index.html#contact" class="nav-cta" lang="en">Get in touch</a>
+  </div>
+</nav>
+
+<!-- BLOG HEADER -->
+<header id="blog-head">
+  <div class="sec-label" lang="sv">Blogg</div>
+  <div class="sec-label" lang="en">Blog</div>
+  <h1 lang="sv">Anteckningar om <em>hantverket</em>.</h1>
+  <h1 lang="en">Notes on the <em>craft</em>.</h1>
+  <p class="blog-intro" lang="sv">
+    Tankar om mjukvaruutveckling, agentiska arbetsflöden och att bygga saker med
+    kvalitet — kortare texter från vardagen som konsult och CTO.
+  </p>
+  <p class="blog-intro" lang="en">
+    Thoughts on software engineering, agentic workflows and building things with
+    quality — short notes from day-to-day life as a consultant and CTO.
+  </p>
+</header>
+
+<!-- POST LIST -->
+<section id="posts">
+  <a class="post reveal" href="blog-agentic-workflows.html">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Agentiska AI</span>
+      <span class="post-cat" lang="en">Agentic AI</span>
+      <br/>
+      <span lang="sv">10 jul 2026 · 4 min</span>
+      <span lang="en">Jul 10, 2026 · 4 min</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Anteckningar om agentiska arbetsflöden</h2>
+      <h2 class="post-title" lang="en">Notes on agentic workflows</h2>
+      <p class="post-excerpt" lang="sv">
+        Hur ser det ut när vem som helst i en organisation kan bidra till
+        mjukvaruutveckling? En första skiss över vad jag utforskar just nu.
+      </p>
+      <p class="post-excerpt" lang="en">
+        What does it look like when anyone in an organisation can contribute to
+        software development? A first sketch of what I'm exploring right now.
+      </p>
+    </div>
+    <div class="post-arrow">↗</div>
+  </a>
+
+  <span class="post upcoming reveal">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Kommer snart</span>
+      <span class="post-cat" lang="en">Coming soon</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Kvalitet som hastighet</h2>
+      <h2 class="post-title" lang="en">Quality as speed</h2>
+      <p class="post-excerpt" lang="sv">
+        Varför färre buggar över tid nästan alltid slår att "gå snabbt" på kort sikt.
+      </p>
+      <p class="post-excerpt" lang="en">
+        Why fewer bugs over time almost always beats "moving fast" in the short run.
+      </p>
+    </div>
+    <div class="post-arrow">·</div>
+  </span>
+
+  <span class="post upcoming reveal">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Kommer snart</span>
+      <span class="post-cat" lang="en">Coming soon</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Fintech från grunden</h2>
+      <h2 class="post-title" lang="en">Fintech from a blank slate</h2>
+      <p class="post-excerpt" lang="sv">
+        Lärdomar från ett green-field-projekt där säkerhet och regelefterlevnad sätter ribban.
+      </p>
+      <p class="post-excerpt" lang="en">
+        Lessons from a green-field project where security and compliance set the bar.
+      </p>
+    </div>
+    <div class="post-arrow">·</div>
+  </span>
+</section>
+
+<!-- CTA STRIP -->
+<section id="blog-cta">
+  <p lang="sv">Har du ett projekt <em>i tankarna?</em></p>
+  <p lang="en">Have a project <em>in mind?</em></p>
+  <a href="index.html#contact" class="btn-inv" lang="sv">Kontakta mig</a>
+  <a href="index.html#contact" class="btn-inv" lang="en">Get in touch</a>
+</section>
+
+<footer>
+  <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
+  <div class="footer-links" lang="sv">
+    <a href="index.html" class="footer-link">Hem</a>
+    <span class="footer-sep">·</span>
+    <a href="privacy.html" class="footer-link">Cookiepolicy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookieinställningar</a>
+  </div>
+  <div class="footer-links" lang="en">
+    <a href="index.html" class="footer-link">Home</a>
+    <span class="footer-sep">·</span>
+    <a href="privacy.html" class="footer-link">Cookie policy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
+  </div>
+</footer>
+</div><!-- /site-content -->
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('vis'), i * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Language toggle
+  (function() {
+    const saved = localStorage.getItem('lang');
+    if (saved && (saved === 'sv' || saved === 'en')) {
+      document.documentElement.lang = saved;
+    }
+    function updateToggle() {
+      const current = document.documentElement.lang;
+      document.querySelectorAll('.lang-opt').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === current);
+      });
+    }
+    updateToggle();
+    document.getElementById('langToggle').addEventListener('click', function() {
+      var current = document.documentElement.lang;
+      var next = current === 'sv' ? 'en' : 'sv';
+      document.documentElement.lang = next;
+      localStorage.setItem('lang', next);
+      updateToggle();
+    });
+  })();
+</script>
+</body>
+</html>
