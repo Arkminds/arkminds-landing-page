@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ett nätverk som säger nej — Arkminds AB</title>
+<meta name="description" content="Ett internt nät utan väg ut, en proxy med kort tillåtelselista och DNS som pekar mot ett svart hål — sandlådans nätverksdesign, och en ärlig hotmodell. Av Kristian Eide, Arkminds AB."/>
+<!-- SEO / social metadata -->
+<link rel="canonical" href="https://arkminds.se/blog-sandbox-network.html">
+<link rel="alternate" type="application/rss+xml" title="Arkminds AB — Blogg" href="https://arkminds.se/feed.xml">
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Arkminds AB"/>
+<meta property="og:locale" content="sv_SE"/>
+<meta property="og:locale:alternate" content="en_GB"/>
+<meta property="og:title" content="Ett nätverk som säger nej"/>
+<meta property="og:description" content="Ett internt nät utan väg ut, en proxy med kort tillåtelselista och DNS som pekar mot ett svart hål — sandlådans nätverksdesign, och en ärlig hotmodell. Av Kristian Eide, Arkminds AB."/>
+<meta property="og:url" content="https://arkminds.se/blog-sandbox-network.html"/>
+<meta property="og:image" content="https://arkminds.se/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="article:published_time" content="2026-07-11"/>
+<meta property="article:author" content="Kristian Eide"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Ett nätverk som säger nej"/>
+<meta name="twitter:description" content="Ett internt nät utan väg ut, en proxy med kort tillåtelselista och DNS som pekar mot ett svart hål — sandlådans nätverksdesign, och en ärlig hotmodell. Av Kristian Eide, Arkminds AB."/>
+<meta name="twitter:image" content="https://arkminds.se/og-image.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ett nätverk som säger nej","alternativeHeadline":"A network that says no","description":"Ett internt nät utan väg ut, en proxy med kort tillåtelselista och DNS som pekar mot ett svart hål — sandlådans nätverksdesign, och en ärlig hotmodell. Av Kristian Eide, Arkminds AB.","inLanguage":["sv","en"],"datePublished":"2026-07-11","dateModified":"2026-07-11","author":{"@type":"Person","name":"Kristian Eide"},"publisher":{"@type":"Organization","name":"Arkminds AB","url":"https://arkminds.se/"},"image":"https://arkminds.se/og-image.png","mainEntityOfPage":"https://arkminds.se/blog-sandbox-network.html","isPartOf":{"@type":"Blog","name":"Arkminds AB — Blogg","url":"https://arkminds.se/blog.html"}}</script>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Google Consent Mode v2: deny by default, Cookiebot updates on user consent -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    'analytics_storage': 'denied',
+    'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+</script>
+<!-- Cookiebot consent management -->
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8f7f2aa3-2f42-4c9e-bb68-26f857859dbf" data-blockingmode="auto" type="text/javascript"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KDVBWY77R0"></script>
+<script>
+  gtag('js', new Date());
+  gtag('config', 'G-KDVBWY77R0');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:    #f7f6f2;
+    --bg2:   #edeae2;
+    --ink:   #0f0f0d;
+    --ink2:  #3a3a35;
+    --muted: #8a897f;
+    --accent:#1a3a2a;
+    --rule:  #d8d5cc;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.6rem 4rem;
+    background: rgba(247,246,242,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; text-decoration: none; }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-cta { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; background: var(--ink); color: var(--bg); padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent); }
+  .lang-toggle {
+    display: flex; align-items: center;
+    font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    border: 1px solid var(--rule); background: transparent; cursor: pointer; padding: 0;
+  }
+  .lang-opt { padding: 0.45rem 0.6rem; color: var(--muted); transition: all 0.2s; line-height: 1; }
+  .lang-opt.active { background: var(--ink); color: var(--bg); }
+
+  /* Language switching – scoped to #site-content so third-party injections (Cookiebot, etc.) are never hidden */
+  html[lang="sv"] #site-content [lang="en"],
+  html[lang="en"] #site-content [lang="sv"] { display: none !important; }
+
+  /* ARTICLE */
+  .article { max-width: 720px; margin: 0 auto; padding: 8rem 4rem 3rem; }
+  .article-back {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+  .article-back:hover { color: var(--ink); }
+  .article-cat {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+  }
+  .article h1 {
+    font-family: 'DM Serif Display', serif; font-weight: 400;
+    font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.06; letter-spacing: -0.025em;
+    margin-bottom: 1.3rem;
+  }
+  .article-meta {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em;
+    color: var(--muted); padding-bottom: 2.2rem; margin-bottom: 2.4rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .article-lead { font-size: 1.12rem; color: var(--ink); line-height: 1.75; margin-bottom: 1.6rem; font-weight: 400; }
+  .article p { font-size: 0.98rem; color: var(--ink2); line-height: 1.85; margin-bottom: 1.3rem; }
+  .article p strong { color: var(--ink); font-weight: 500; }
+  .article h2 {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--ink); margin: 2.8rem 0 1rem;
+  }
+  .article blockquote {
+    font-family: 'DM Serif Display', serif; font-style: italic;
+    font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.35; color: var(--accent);
+    border-left: 2px solid var(--accent); padding-left: 1.6rem; margin: 2.4rem 0;
+  }
+  .article a { color: var(--accent); }
+  .article-end {
+    margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .article-author { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ink2); }
+  .article-author span { color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); border-top: 1px solid rgba(247,246,242,0.08);
+    padding: 1.8rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: rgba(247,246,242,0.2); letter-spacing: 0.1em; }
+  .footer-links { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: rgba(247,246,242,0.2); }
+  .footer-link { color: rgba(247,246,242,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-link:hover { color: rgba(247,246,242,0.7); }
+  .footer-sep { margin: 0 0.4rem; color: rgba(247,246,242,0.15); }
+
+  @media(max-width:800px){
+    nav { padding: 1.2rem 1.5rem; }
+    .article { padding: 6rem 1.5rem 2.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+  }
+  @media(max-width:480px){
+    .article { padding: 5.5rem 1.2rem 2rem; }
+    footer { padding: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="site-content">
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">ARKMINDS AB</a>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" aria-label="Byt språk">
+      <span class="lang-opt active" data-lang="sv">SV</span>
+      <span class="lang-opt" data-lang="en">EN</span>
+    </button>
+    <a href="index.html#contact" class="nav-cta" lang="sv">Kontakta mig</a>
+    <a href="index.html#contact" class="nav-cta" lang="en">Get in touch</a>
+  </div>
+</nav>
+
+<!-- ARTICLE -->
+<article class="article">
+  <a href="blog.html" class="article-back" lang="sv">← Tillbaka till bloggen</a>
+  <a href="blog.html" class="article-back" lang="en">← Back to the blog</a>
+
+  <div class="article-cat" lang="sv">Agentisk AI · Sandlådan, del 2</div>
+  <div class="article-cat" lang="en">Agentic AI · The sandbox, part 2</div>
+  <h1 lang="sv">Ett nätverk som säger nej</h1>
+  <h1 lang="en">A network that says no</h1>
+  <div class="article-meta" lang="sv">Kristian Eide · 11 juli 2026 · 4 min läsning</div>
+  <div class="article-meta" lang="en">Kristian Eide · July 11, 2026 · 4 min read</div>
+
+  <p class="article-lead" lang="sv">
+    Del två om <a href="blog-agent-sandbox.html">sandlådan för AI-agenter</a> handlar
+    om nätverket, för det är här den verkliga risken bor: en promptinjektion som lurar
+    agenten blir farlig på riktigt först när bytet också kan lämna lådan. Grundregeln
+    är därför enkel — som standard går ingenting ut.
+  </p>
+  <p class="article-lead" lang="en">
+    Part two on the <a href="blog-agent-sandbox.html">AI-agent sandbox</a> is about the
+    network, because this is where the real risk lives: a prompt injection that fools
+    the agent only becomes truly dangerous once the loot can also leave the box. So the
+    ground rule is simple — by default, nothing gets out.
+  </p>
+
+  <h2 lang="sv">Ingen väg ut</h2>
+  <h2 lang="en">No way out</h2>
+  <p lang="sv">
+    Tricket sitter i topologin, inte i en brandväggsregel. Sandlådan hänger på ett
+    internt nät utan gateway — det finns bokstavligen ingen rutt till internet. Den
+    enda grannen den kan nå är proxyn, som i sin tur står med ett ben på utsidan.
+    Det gör skyddet robust på ett skönt sätt: det håller även om agenten struntar i
+    sina proxyinställningar, för paketen har ändå ingenstans att ta vägen.
+  </p>
+  <p lang="en">
+    The trick is in the topology, not in a firewall rule. The sandbox sits on an
+    internal network with no gateway — there is literally no route to the internet.
+    The only neighbour it can reach is the proxy, which in turn stands with one foot
+    on the outside. That makes the control pleasantly robust: it holds even if the
+    agent ignores its proxy settings, because the packets have nowhere to go anyway.
+  </p>
+
+  <h2 lang="sv">En kort lista med undantag</h2>
+  <h2 lang="en">A short list of exceptions</h2>
+  <p lang="sv">
+    Proxyn släpper bara igenom anslutningar till värdnamn på en kort, versionshanterad
+    lista: modell-API:et, GitHub, de paketkällor man valt att lita på. Den tittar
+    enbart på värdnamn — trafiken dekrypteras aldrig. Alternativet, att terminera TLS
+    och inspektera innehållet, ger förstås mer kontroll, men kräver egna certifikat i
+    varje klient och går sönder mot allt som fäster sina certifikat. Enkelheten är en
+    poäng i sig: en lista som går att läsa på tio sekunder är en lista som faktiskt
+    blir granskad.
+  </p>
+  <p lang="en">
+    The proxy only lets through connections to hostnames on a short, version-controlled
+    list: the model API, GitHub, the package feeds you've chosen to trust. It looks at
+    hostnames only — traffic is never decrypted. The alternative, terminating TLS and
+    inspecting the contents, buys more control but requires your own certificate in
+    every client and breaks against anything that pins its certificates. The simplicity
+    is a feature in itself: a list you can read in ten seconds is a list that actually
+    gets reviewed.
+  </p>
+
+  <h2 lang="sv">DNS är också en kanal</h2>
+  <h2 lang="en">DNS is a channel too</h2>
+  <p lang="sv">
+    En klassisk väg förbi utgående filter är DNS-tunnling — att smuggla data i själva
+    namnuppslagen. Därför pekar sandlådans DNS på ett svart hål: uppslag inifrån går
+    ingenstans. De tillåtna namnen slår proxyn i stället upp själv, på utsidan.
+    Inifrån lådan finns alltså varken en väg för paketen eller en väg för namnen.
+  </p>
+  <p lang="en">
+    A classic way around egress filtering is DNS tunnelling — smuggling data inside the
+    name lookups themselves. So the sandbox's DNS points at a black hole: lookups from
+    inside go nowhere. The allowed names are resolved by the proxy itself, on the
+    outside. From inside the box there is neither a route for the packets nor a route
+    for the names.
+  </p>
+
+  <blockquote lang="sv">Det som inte uttryckligen är tillåtet händer helt enkelt inte.</blockquote>
+  <blockquote lang="en">What isn't explicitly allowed simply doesn't happen.</blockquote>
+
+  <h2 lang="sv">En ärlig hotmodell</h2>
+  <h2 lang="en">An honest threat model</h2>
+  <p lang="sv">
+    En kanal är alltid öppen: den till modelleverantören. Det är så inferensen och
+    fjärrstyrningen fungerar — stänger man den finns ingen agent kvar. Noll
+    exfiltration skulle kräva lokal inferens, och det är en annan design. Det filtret
+    faktiskt ger är något annat, men värdefullt: varje nekat anrop misslyckas rent och
+    tydligt och hamnar i loggen. Den loggen blir ett arbetsflöde — listan över nekade
+    domäner är precis det underlag som behövs för att medvetet besluta vad som ska
+    släppas igenom härnäst, i stället för att gissa i förväg.
+  </p>
+  <p lang="en">
+    One channel is always open: the one to the model provider. That's how inference and
+    remote control work — close it and there is no agent left. Zero exfiltration would
+    require local inference, and that's a different design. What the filter actually
+    buys is something else, but valuable: every denied request fails cleanly and
+    loudly, and lands in a log. That log becomes a workflow — the list of denied
+    domains is exactly the evidence you need to decide, deliberately, what to allow
+    next, instead of guessing up front.
+  </p>
+  <p lang="sv">
+    Det märks också från insidan. En agent i en miljö med tydliga nej beter sig bättre
+    än en i en miljö med mystiska fel: ett blockerat anrop är ett rent 403, inte något
+    som hänger sig — och då är omvägen aldrig långt borta.
+  </p>
+  <p lang="en">
+    You notice it from the inside, too. An agent in an environment of clear no's
+    behaves better than one in an environment of mysterious failures: a blocked request
+    is a clean 403, not something that hangs — and then the workaround is never far
+    away.
+  </p>
+
+  <h2 lang="sv">Nästa del</h2>
+  <h2 lang="en">Next up</h2>
+  <p lang="sv">
+    I <a href="blog-sandbox-credentials.html">del 3</a> handlar det om nycklarna: var
+    tokens ska bo, varför agenten helst inte ska hålla i några alls — och varför sista
+    spärren alltid är en människa.
+  </p>
+  <p lang="en">
+    <a href="blog-sandbox-credentials.html">Part 3</a> is about the keys: where tokens
+    should live, why the agent ideally holds none at all — and why the final gate is
+    always a human.
+  </p>
+
+  <div class="article-end">
+    <div class="article-author" lang="sv">Skrivet av Kristian Eide · <span>Arkminds AB</span></div>
+    <div class="article-author" lang="en">Written by Kristian Eide · <span>Arkminds AB</span></div>
+  </div>
+</article>
+
+<footer>
+  <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
+  <div class="footer-links" lang="sv">
+    <a href="blog.html" class="footer-link">Blogg</a>
+    <span class="footer-sep">·</span>
+    <a href="privacy.html" class="footer-link">Cookiepolicy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookieinställningar</a>
+  </div>
+  <div class="footer-links" lang="en">
+    <a href="blog.html" class="footer-link">Blog</a>
+    <span class="footer-sep">·</span>
+    <a href="privacy.html" class="footer-link">Cookie policy</a>
+    <span class="footer-sep">·</span>
+    <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
+  </div>
+</footer>
+</div><!-- /site-content -->
+
+<script>
+  // Language toggle (shared with index.html via localStorage)
+  (function() {
+    const saved = localStorage.getItem('lang');
+    if (saved && (saved === 'sv' || saved === 'en')) {
+      document.documentElement.lang = saved;
+    }
+    function updateToggle() {
+      const current = document.documentElement.lang;
+      document.querySelectorAll('.lang-opt').forEach(function(el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === current);
+      });
+    }
+    updateToggle();
+    document.getElementById('langToggle').addEventListener('click', function() {
+      var current = document.documentElement.lang;
+      var next = current === 'sv' ? 'en' : 'sv';
+      document.documentElement.lang = next;
+      localStorage.setItem('lang', next);
+      updateToggle();
+    });
+  })();
+</script>
+</body>
+</html>
