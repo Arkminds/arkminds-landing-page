@@ -173,30 +173,33 @@
 
   <p lang="sv">
     Jag har byggt ett litet proof of concept som gör precis det — en Docker-sandlåda
-    utvecklad för Claude Code, där agenten kör i en isolerad Linux-microVM med alla
-    verktyg den behöver på plats: .NET, Azure CLI, Playwright, Node, Python, Go.
-    Upplägget vilar på tre idéer.
+    utvecklad för Claude Code, där agenten jobbar i en isolerad engångsmiljö med sina
+    verktyg förinstallerade (PoC-imagen innehåller .NET, Azure CLI, Playwright, Node,
+    Python och Go). Det här inlägget beskriver mönstret som det ser ut i PoC:n; den
+    sandlåda jag faktiskt kör idag skiljer sig på några punkter, och jag pekar ut dem
+    längs vägen. Upplägget vilar på tre idéer.
   </p>
   <p lang="en">
     I've built a small proof of concept that does exactly that — a Docker sandbox
-    developed for Claude Code, where the agent runs inside an isolated Linux microVM
-    with the tools it needs pre-installed: .NET, Azure CLI, Playwright, Node, Python,
-    Go. Three ideas carry the whole thing.
+    developed for Claude Code, where the agent works in a disposable, isolated
+    environment with its tools pre-installed (the PoC image ships .NET, Azure CLI,
+    Playwright, Node, Python and Go). This post describes the pattern as the PoC lays
+    it out; the sandbox I actually run today differs in a few places, and I'll point
+    them out along the way. Three ideas carry the whole thing.
   </p>
 
   <h2 lang="sv">Isolering som standard</h2>
   <h2 lang="en">Isolation by default</h2>
   <p lang="sv">
-    Agenten jobbar inte på min dator, utan i en tillfällig virtuell maskin med mitt
-    projekt monterat. Allt den gör stannar i lådan. När uppgiften är klar raderas hela
-    maskinen med ett kommando — och har den ställt till något på vägen försvinner det
-    med den.
+    Agenten jobbar inte på min dator, utan i en egen isolerad miljö med mitt projekt
+    monterat. Allt den gör stannar i lådan. När uppgiften är klar slängs hela miljön
+    med ett kommando — och har den ställt till något på vägen försvinner det med den.
   </p>
   <p lang="en">
-    The agent doesn't work on my computer; it works in a disposable virtual machine that
-    happens to have my project mounted into it. Everything it does stays inside the box.
-    When the task is done, one command deletes the whole machine — and whatever mess was
-    made goes with it.
+    The agent doesn't work on my computer; it works in an isolated environment of its
+    own with my project mounted into it. Everything it does stays inside the box. When
+    the task is done, one command throws the whole environment away — and whatever mess
+    was made goes with it.
   </p>
 
   <h2 lang="sv">Nätverket är deny-all</h2>
@@ -204,38 +207,46 @@
   <p lang="sv">
     Inifrån sandlådan finns nästan inget internet. All utgående trafik går genom en
     proxy där grundregeln är att blockera allt — bara en kort lista med undantag släpps
-    igenom: GitHub, paketkällorna vi använder, Azure DevOps. Till och med npm-registret
-    är stängt under körning; paketen agenten behöver bakas in i imagen redan när den
-    byggs, så agenten kan inte luras att hämta hem och köra godtycklig kod. Och skulle
-    en promptinjektion någon gång få agenten att försöka läcka något, finns det väldigt
-    få ställen att skicka det till.
+    igenom: GitHub, paketkällorna vi använder, Azure DevOps. Hur hårt man drar åt går
+    att välja: PoC:n går så långt att npm-registret är stängt under körning och paketen
+    bakas in i imagen redan när den byggs, så att agenten inte kan luras att hämta hem
+    och köra godtycklig kod; sandlådan jag kör idag släpper i stället igenom de
+    paketkällor vi litar på. Och skulle en promptinjektion någon gång få agenten att
+    försöka läcka något, finns det väldigt få ställen att skicka det till.
   </p>
   <p lang="en">
     From inside the sandbox, the internet mostly doesn't exist. Outbound traffic passes
     through a proxy with a deny-all policy and a short allowlist: GitHub, the package
-    feeds we rely on, Azure DevOps. Everything else is blocked. Even the npm registry is
-    shut off at runtime — the packages the agent needs are baked into the image when it's
-    built, so it can't be tricked into pulling down and running arbitrary code. And if a
-    prompt injection ever talks the agent into leaking something, there are very few
-    places left to send it.
+    feeds we rely on, Azure DevOps. Everything else is blocked. How tightly you turn
+    that dial is a choice: the PoC goes as far as shutting off the npm registry at
+    runtime and baking the packages into the image at build time, so the agent can't be
+    tricked into pulling down and running arbitrary code; the sandbox I run today keeps
+    the registries we trust on the allowlist instead. And if a prompt injection ever
+    talks the agent into leaking something, there are very few places left to send it.
   </p>
 
   <h2 lang="sv">Nycklarna sitter i proxyn</h2>
   <h2 lang="en">The keys live in the proxy</h2>
   <p lang="sv">
-    Agenten får aldrig några inloggningsuppgifter. I stället injicerar en liten reverse
-    proxy i sandlådan rätt Authorization-header mot rätt tjänst — en GitHub-token mot
-    GitHubs API, en Azure DevOps-PAT mot Azure DevOps. Reglerna ligger i en vanlig
-    JSON-fil, så en ny tjänst är en konfigurationsändring snarare än ny kod. Och
-    eftersom proxyn sköter autentiseringen fungerar kortlivade SSO-tokens precis lika
-    bra som långlivade personliga access tokens.
+    Så här ser mönstret ut i sin idealform, och så gör PoC:n: agenten får aldrig några
+    inloggningsuppgifter. I stället injicerar en liten reverse proxy i sandlådan rätt
+    Authorization-header mot rätt tjänst — en GitHub-token mot GitHubs API, en Azure
+    DevOps-PAT mot Azure DevOps. Reglerna ligger i en vanlig JSON-fil, så en ny tjänst
+    är en konfigurationsändring snarare än ny kod. Och eftersom proxyn sköter
+    autentiseringen fungerar kortlivade SSO-tokens precis lika bra som långlivade
+    personliga access tokens. Sandlådan jag kör idag tar en enklare väg — en token med
+    snäva behörigheter — men målet är detsamma: agenten ska inte hålla i fler nycklar
+    än uppgiften kräver.
   </p>
   <p lang="en">
-    The agent is never configured with credentials. A small reverse proxy inside the
-    sandbox injects the right Authorization header for the right host — a GitHub token
-    for the GitHub API, an Azure DevOps PAT for Azure DevOps. The rules are plain JSON,
-    so adding a service is configuration rather than code, and short-lived SSO tokens
-    work just as well as long-lived personal access tokens.
+    This is the pattern's ideal, and how the PoC does it: the agent is never configured
+    with credentials. A small reverse proxy inside the sandbox injects the right
+    Authorization header for the right host — a GitHub token for the GitHub API, an
+    Azure DevOps PAT for Azure DevOps. The rules are plain JSON, so adding a service is
+    configuration rather than code, and short-lived SSO tokens work just as well as
+    long-lived personal access tokens. The sandbox I run today takes a simpler route —
+    a narrowly scoped token — but the goal is the same: the agent shouldn't hold more
+    keys than the task needs.
   </p>
 
   <blockquote lang="sv">Skyddsräckena hör hemma i miljön — inte i användarens vaksamhet.</blockquote>
@@ -246,12 +257,13 @@
   <p lang="sv">
     <strong>Fria tyglar utan blind tillit.</strong> Agenten kan köras i det läge där den
     faktiskt är produktiv — utan bekräftelsefråga före varje kommando — eftersom det
-    värsta som kan hända drabbar en virtuell maskin som ändå ska slängas, inte din dator.
+    värsta som kan hända drabbar en miljö som ändå ska slängas, inte din dator.
   </p>
   <p lang="en">
     <strong>Full autonomy without full trust.</strong> The agent can run in the mode
     where it's actually productive — no confirmation prompt before every command —
-    because the blast radius is a disposable VM with a closed network, not your laptop.
+    because the blast radius is a disposable, isolated environment with a closed
+    network, not your laptop.
   </p>
   <p lang="sv">
     <strong>Arbete mot privat kod och interna system.</strong> Proxyupplägget gör att
