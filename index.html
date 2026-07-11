@@ -53,6 +53,8 @@
   .nav-logo { font-family: 'DM Mono', monospace; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--ink); font-weight: 500; }
   .nav-cta { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; background: var(--ink); color: var(--bg); padding: 0.65rem 1.5rem; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--accent); }
+  .nav-link { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--accent); }
 
   /* HERO */
   #hero {
@@ -221,6 +223,8 @@
 <nav id="nav">
   <div class="nav-logo">ARKMINDS AB</div>
   <div class="nav-right">
+    <a href="blog.html" class="nav-link" lang="sv" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'blog'})">Blogg</a>
+    <a href="blog.html" class="nav-link" lang="en" onclick="gtag('event', 'click', {event_category: 'navigation', event_label: 'blog'})">Blog</a>
     <button class="lang-toggle" id="langToggle" aria-label="Byt språk">
       <span class="lang-opt active" data-lang="sv">SV</span>
       <span class="lang-opt" data-lang="en">EN</span>
@@ -367,11 +371,15 @@
 <footer>
   <div class="footer-logo">ARKMINDS AB · KRISTIAN EIDE © 2026</div>
   <div class="footer-links" lang="sv">
+    <a href="blog.html" class="footer-link">Blogg</a>
+    <span class="footer-sep">·</span>
     <a href="privacy.html" class="footer-link">Cookiepolicy</a>
     <span class="footer-sep">·</span>
     <a href="javascript:Cookiebot.renew()" class="footer-link">Cookieinställningar</a>
   </div>
   <div class="footer-links" lang="en">
+    <a href="blog.html" class="footer-link">Blog</a>
+    <span class="footer-sep">·</span>
     <a href="privacy.html" class="footer-link">Cookie policy</a>
     <span class="footer-sep">·</span>
     <a href="javascript:Cookiebot.renew()" class="footer-link">Cookie settings</a>
