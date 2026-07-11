@@ -173,15 +173,15 @@
 
   <p lang="sv">
     Jag har byggt ett litet proof of concept som gör precis det — en Docker-sandlåda
-    där en kodagent (GitHub Copilot CLI i det här fallet) kör i en isolerad
-    Linux-microVM med alla verktyg den behöver på plats: .NET, Azure CLI, Playwright,
-    Node, Python, Go. Upplägget vilar på tre idéer.
+    utvecklad för Claude Code, där agenten kör i en isolerad Linux-microVM med alla
+    verktyg den behöver på plats: .NET, Azure CLI, Playwright, Node, Python, Go.
+    Upplägget vilar på tre idéer.
   </p>
   <p lang="en">
-    I've built a small proof of concept that does exactly that — a Docker sandbox that
-    runs a coding agent (GitHub Copilot CLI, in this case) inside an isolated Linux
-    microVM, with the tools it needs pre-installed: .NET, Azure CLI, Playwright, Node,
-    Python, Go. Three ideas carry the whole thing.
+    I've built a small proof of concept that does exactly that — a Docker sandbox
+    developed for Claude Code, where the agent runs inside an isolated Linux microVM
+    with the tools it needs pre-installed: .NET, Azure CLI, Playwright, Node, Python,
+    Go. Three ideas carry the whole thing.
   </p>
 
   <h2 lang="sv">Isolering som standard</h2>
@@ -280,18 +280,16 @@
   <h2 lang="sv">Vart det här är på väg</h2>
   <h2 lang="en">Where this is heading</h2>
   <p lang="sv">
-    Det här är ett proof of concept byggt kring Copilot CLI — men inget i mönstret är
+    Det här är ett proof of concept utvecklat för Claude Code — men inget i mönstret är
     knutet till just den agenten. Samma recept fungerar för vilken agent som helst som
-    går att köra i en terminal: isolera, filtrera, injicera. Koden finns
-    <a href="https://github.com/Arkminds/dcoker-sandbox-poc" target="_blank" rel="noopener">på GitHub</a>,
-    och i kommande inlägg tänker jag gräva djupare i de enskilda delarna.
+    går att köra i en terminal: isolera, filtrera, injicera. I kommande inlägg tänker
+    jag gräva djupare i de enskilda delarna.
   </p>
   <p lang="en">
-    This is a proof of concept, built around Copilot CLI — but nothing in the pattern is
+    This is a proof of concept developed for Claude Code — but nothing in the pattern is
     specific to that agent. The same recipe works for any agent you can run in a
-    terminal: isolate, allowlist, inject. The code is
-    <a href="https://github.com/Arkminds/dcoker-sandbox-poc" target="_blank" rel="noopener">on GitHub</a>,
-    and in future posts I'll dig into the individual pieces.
+    terminal: isolate, allowlist, inject. In future posts I'll dig into the individual
+    pieces.
   </p>
 
   <div class="article-end">
