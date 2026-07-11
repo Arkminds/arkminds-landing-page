@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Arkminds AB — Blogg</title>
+    <link>https://arkminds.se/blog.html</link>
+    <atom:link href="https://arkminds.se/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet — av Kristian Eide, Arkminds AB. Alla inlägg finns på svenska och engelska.</description>
+    <language>sv</language>
+    <lastBuildDate>Sat, 11 Jul 2026 12:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Vem håller i nycklarna? (Sandlådan, del 3)</title>
+      <link>https://arkminds.se/blog-sandbox-credentials.html</link>
+      <guid isPermaLink="true">https://arkminds.se/blog-sandbox-credentials.html</guid>
+      <pubDate>Sat, 11 Jul 2026 12:00:00 +0000</pubDate>
+      <description>Tokens i miljövariabler är den svaga punkten. Om snäva behörigheter, en proxy som injicerar autentisering — och varför agenten aldrig får slå ihop sina egna pull requests. (Also available in English: Who holds the keys?)</description>
+    </item>
+    <item>
+      <title>Ett nätverk som säger nej (Sandlådan, del 2)</title>
+      <link>https://arkminds.se/blog-sandbox-network.html</link>
+      <guid isPermaLink="true">https://arkminds.se/blog-sandbox-network.html</guid>
+      <pubDate>Sat, 11 Jul 2026 11:50:00 +0000</pubDate>
+      <description>Ett internt nät utan väg ut, en proxy med kort tillåtelselista och DNS som pekar mot ett svart hål — sandlådans nätverksdesign, och en ärlig hotmodell. (Also available in English: A network that says no.)</description>
+    </item>
+    <item>
+      <title>Isolering i lager (Sandlådan, del 1)</title>
+      <link>https://arkminds.se/blog-sandbox-isolation.html</link>
+      <guid isPermaLink="true">https://arkminds.se/blog-sandbox-isolation.html</guid>
+      <pubDate>Sat, 11 Jul 2026 11:40:00 +0000</pubDate>
+      <description>Namnrymder, resurstak, privilegiestaket och ett skrivskyddat filsystem — hur en sandlåda för AI-agenter byggs i lager där inget enskilt skydd behöver bära allt. (Also available in English: Isolation in layers.)</description>
+    </item>
+    <item>
+      <title>En sandlåda för AI-agenter</title>
+      <link>https://arkminds.se/blog-agent-sandbox.html</link>
+      <guid isPermaLink="true">https://arkminds.se/blog-agent-sandbox.html</guid>
+      <pubDate>Sat, 11 Jul 2026 10:48:00 +0000</pubDate>
+      <description>Ge agenten en egen dator: en Docker-sandlåda med isolering, stängt nätverk och en proxy som sköter nycklarna — och vad det gör möjligt. (Also available in English: A sandbox for AI agents.)</description>
+    </item>
+  </channel>
+</rss>
