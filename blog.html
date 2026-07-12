@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Blogg — Arkminds AB</title>
 <meta name="description" content="Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet — av Kristian Eide, Arkminds AB."/>
+<!-- SEO / social metadata -->
+<link rel="canonical" href="https://arkminds.se/blog.html">
+<link rel="alternate" type="application/rss+xml" title="Arkminds AB — Blogg" href="https://arkminds.se/feed.xml">
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Arkminds AB"/>
+<meta property="og:locale" content="sv_SE"/>
+<meta property="og:locale:alternate" content="en_GB"/>
+<meta property="og:title" content="Blogg — Arkminds AB"/>
+<meta property="og:description" content="Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet — av Kristian Eide, Arkminds AB."/>
+<meta property="og:url" content="https://arkminds.se/blog.html"/>
+<meta property="og:image" content="https://arkminds.se/og-image.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Blogg — Arkminds AB"/>
+<meta name="twitter:description" content="Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet — av Kristian Eide, Arkminds AB."/>
+<meta name="twitter:image" content="https://arkminds.se/og-image.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"Arkminds AB — Blogg","url":"https://arkminds.se/blog.html","description":"Anteckningar om mjukvaruutveckling, agentiska arbetsflöden och att bygga med kvalitet.","inLanguage":["sv","en"],"author":{"@type":"Person","name":"Kristian Eide"},"publisher":{"@type":"Organization","name":"Arkminds AB","url":"https://arkminds.se/"}}</script>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Google Consent Mode v2: deny by default, Cookiebot updates on user consent -->
 <script>
@@ -190,6 +208,72 @@
       <p class="post-excerpt" lang="en">
         Give the agent its own machine: isolation, a closed network and a proxy that
         holds the keys. A tour of the main concepts — and what they make possible.
+      </p>
+    </div>
+    <div class="post-arrow">↗</div>
+  </a>
+  <a class="post reveal" href="blog-sandbox-isolation.html">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Agentisk AI</span>
+      <span class="post-cat" lang="en">Agentic AI</span>
+      <br/>
+      <span lang="sv">11 jul 2026 · 4 min · Sandlådan, del 1</span>
+      <span lang="en">Jul 11, 2026 · 4 min · The sandbox, part 1</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Isolering i lager</h2>
+      <h2 class="post-title" lang="en">Isolation in layers</h2>
+      <p class="post-excerpt" lang="sv">
+        Namnrymder, resurstak, privilegiestaket och ett skrivskyddat filsystem —
+        varför sandlådan byggs i lager där inget enskilt skydd behöver bära allt.
+      </p>
+      <p class="post-excerpt" lang="en">
+        Namespaces, resource caps, a privilege fence and a read-only filesystem —
+        why the sandbox is built in layers where no single control has to hold.
+      </p>
+    </div>
+    <div class="post-arrow">↗</div>
+  </a>
+  <a class="post reveal" href="blog-sandbox-network.html">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Agentisk AI</span>
+      <span class="post-cat" lang="en">Agentic AI</span>
+      <br/>
+      <span lang="sv">11 jul 2026 · 4 min · Sandlådan, del 2</span>
+      <span lang="en">Jul 11, 2026 · 4 min · The sandbox, part 2</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Ett nätverk som säger nej</h2>
+      <h2 class="post-title" lang="en">A network that says no</h2>
+      <p class="post-excerpt" lang="sv">
+        Ett internt nät utan väg ut, en kort tillåtelselista och DNS som pekar mot
+        ett svart hål — plus en ärlig hotmodell.
+      </p>
+      <p class="post-excerpt" lang="en">
+        An internal network with no way out, a short allowlist and DNS pointed at a
+        black hole — plus an honest threat model.
+      </p>
+    </div>
+    <div class="post-arrow">↗</div>
+  </a>
+  <a class="post reveal" href="blog-sandbox-credentials.html">
+    <div class="post-meta">
+      <span class="post-cat" lang="sv">Agentisk AI</span>
+      <span class="post-cat" lang="en">Agentic AI</span>
+      <br/>
+      <span lang="sv">11 jul 2026 · 4 min · Sandlådan, del 3</span>
+      <span lang="en">Jul 11, 2026 · 4 min · The sandbox, part 3</span>
+    </div>
+    <div>
+      <h2 class="post-title" lang="sv">Vem håller i nycklarna?</h2>
+      <h2 class="post-title" lang="en">Who holds the keys?</h2>
+      <p class="post-excerpt" lang="sv">
+        Tokens i miljön är den svaga punkten. Om snäva behörigheter, en proxy som
+        sköter autentiseringen — och varför agenten aldrig får merga själv.
+      </p>
+      <p class="post-excerpt" lang="en">
+        Tokens in the environment are the weak spot. On narrow scopes, a proxy that
+        handles auth — and why the agent never merges its own work.
       </p>
     </div>
     <div class="post-arrow">↗</div>
